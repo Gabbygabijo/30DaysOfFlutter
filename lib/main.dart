@@ -1,36 +1,68 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  List<String> restaurants = [
+    'McDonald\'s',
+    'Rosceo\'s Chicken and Waffles',
+    'Olive Garden',
+    'Pizza Hut',
+    'Panda Express',
+    'Subway'
+  ];
+
+  int? currenIndex;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(133, 182, 180, 72),
-          title: const Text('Hello: Flutter is fun'),
-        ),
-        body: Center(
-          child: Container(
-            color: const Color(0xD1BEBEBE),
-            width: 300,
-            height: 200,
-            padding: const EdgeInsets.all(20),
-            child: const Text(
-              'Hi People', 
-              style: TextStyle(
-                color: Colors.yellow,
-                fontSize: 39,
-                fontWeight: FontWeight.normal
-              ),),
-          ),
-        ),
-      ),
+          body: Center(
+              child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('What do you want to eat?'),
+          if (currenIndex != null)
+            Text(
+              restaurants[currenIndex!],
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          const Padding(padding: EdgeInsets.only(top: 50)),
+          TextButton(
+            onPressed: () {
+              updateIndex();
+            },
+            style: TextButton.styleFrom(
+                backgroundColor: Colors.purple,
+                foregroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero)),
+            child: const Text('Pick Retaurant'),
+          )
+        ],
+      ))),
     );
+  }
+
+  void updateIndex() {
+    final random = Random();
+    final index = random.nextInt(restaurants.length);
+    setState(() {
+      currenIndex = index;
+    });
   }
 }
