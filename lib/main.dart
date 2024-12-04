@@ -1,5 +1,6 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -9,60 +10,81 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _MyAppState();
-  }
+  State<StatefulWidget> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> restaurants = [
-    'McDonald\'s',
-    'Rosceo\'s Chicken and Waffles',
-    'Olive Garden',
-    'Pizza Hut',
-    'Panda Express',
-    'Subway'
-  ];
+  final controller = TextEditingController();
 
-  int? currenIndex;
+  final List<bool> _selection = [true, false, false];
+
+  String? tip;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          body: Center(
-              child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('What do you want to eat?'),
-          if (currenIndex != null)
-            Text(
-              restaurants[currenIndex!],
-              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          const Padding(padding: EdgeInsets.only(top: 50)),
-          TextButton(
-            onPressed: () {
-              updateIndex();
-            },
-            style: TextButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero)),
-            child: const Text('Pick Retaurant'),
-          )
-        ],
-      ))),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (tip != null)
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(tip!, style: const TextStyle(fontSize: 30),),
+                ),
+              const Text('Total Amount'),
+              SizedBox(
+                width: 70,
+                child: TextField(
+                  controller: controller,
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration(hintText: '\$100.00'),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: ToggleButtons(
+                  isSelected: _selection,
+                  onPressed: updateSelection,
+                  children: [Text('10%'), Text('15%'), Text('20')],
+                ),
+              ),
+              TextButton(
+                onPressed: calculateTip,
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero)),
+                child: const Text('Calculate Tip'),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  void updateIndex() {
-    final random = Random();
-    final index = random.nextInt(restaurants.length);
+  void updateSelection(int selectedIndex) {
     setState(() {
-      currenIndex = index;
+      for (int i = 0; i < _selection.length; i++) {
+        _selection[i] = selectedIndex == i;
+      }
+    });
+  }
+
+  void calculateTip() {
+    final totalAmount = double.parse(controller.text);
+    final selectedIndex = _selection.indexWhere((element) => element);
+    final tipPecentage = [0.1, 0.15, 0.2][selectedIndex];
+
+    final tipTotal = (totalAmount * tipPecentage).toStringAsFixed(2);
+
+    setState(() {
+      tip = '\$$tipTotal';
     });
   }
 }
