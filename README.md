@@ -10,8 +10,8 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Day #2/30
 
--Design the simple UI for the app. 🔧
+- Design the simple UI for the app. 🔧
 
--Used ToggleButton. 📘
+- Used ToggleButton. 📘
 
 - Created a tip calculator app that allows users to know the amount of tip they get from the puchase they made 💯
