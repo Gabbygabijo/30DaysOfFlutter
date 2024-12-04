@@ -14,4 +14,4 @@ Each day will have it's own branch, switch branch to see the project
 
 - Used ToggleButton. 📘
 
-- Created a tip calculator app that allows users to know the amount of tip they get from the puchase they made 💯
+- Created a tip calculator app that allows users to know the amount of tip they get from the purchase they made 💯
