@@ -1,16 +1,15 @@
 # aflutterapp
 
-A new Flutter project.
+## A 30 days challenge.
 
-## Getting Started
+NOTE: This branch(master) will only carry the current day project.
 
-This project is a starting point for a Flutter application.
+Each day will have it's own branch, switch branch to see the project
 
-A few resources to get you started if this is your first Flutter project:
+## Present challenge
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Day #1/30
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+-Set up my development environment. 🔧
+-Explored the basics of Flutter and Dart. 📘
+-Built my first simple app📱: An app that selects at random from the listed restaurants, to help users decide where to eat 😋 
