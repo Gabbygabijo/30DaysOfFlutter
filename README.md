@@ -8,10 +8,10 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #1/30
+## Day #2/30
 
--Set up my development environment. 🔧
+-Design the simple UI for the app. 🔧
 
--Explored the basics of Flutter and Dart. 📘
+-Used ToggleButton. 📘
 
--Built my first simple app📱: An app that selects at random from the listed restaurants, to help users decide where to eat 😋 
+- Created a tip calculator app that allows users to know the amount of tip they get from the puchase they made 💯
