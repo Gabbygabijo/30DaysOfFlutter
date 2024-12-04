@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -49,7 +47,7 @@ class _MyAppState extends State<MyApp> {
                 child: ToggleButtons(
                   isSelected: _selection,
                   onPressed: updateSelection,
-                  children: [Text('10%'), Text('15%'), Text('20')],
+                  children: const [Text('10%'), Text('15%'), Text('20')],
                 ),
               ),
               TextButton(
