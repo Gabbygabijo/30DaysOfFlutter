@@ -12,77 +12,34 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final controller = TextEditingController();
-
-  final List<bool> _selection = [true, false, false];
-
-  String? tip;
+  double _fontSize = 40;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
+        body: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (tip != null)
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(tip!, style: const TextStyle(fontSize: 30),),
-                ),
-              const Text('Total Amount'),
-              SizedBox(
-                width: 70,
+              Expanded(
                 child: TextField(
-                  controller: controller,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(hintText: '\$100.00'),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  textInputAction: TextInputAction.done,
+                  style: TextStyle(fontSize: _fontSize),
+                  maxLines: null,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: ToggleButtons(
-                  isSelected: _selection,
-                  onPressed: updateSelection,
-                  children: const [Text('10%'), Text('15%'), Text('20')],
-                ),
-              ),
-              TextButton(
-                onPressed: calculateTip,
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero)),
-                child: const Text('Calculate Tip'),
+              Slider(
+                value: _fontSize,
+                onChanged: (newSize) {
+                  setState(() => _fontSize = newSize);
+                },
+                min: 30,
+                max: 200,
               )
             ],
           ),
         ),
       ),
     );
-  }
-
-  void updateSelection(int selectedIndex) {
-    setState(() {
-      for (int i = 0; i < _selection.length; i++) {
-        _selection[i] = selectedIndex == i;
-      }
-    });
-  }
-
-  void calculateTip() {
-    final totalAmount = double.parse(controller.text);
-    final selectedIndex = _selection.indexWhere((element) => element);
-    final tipPecentage = [0.1, 0.15, 0.2][selectedIndex];
-
-    final tipTotal = (totalAmount * tipPecentage).toStringAsFixed(2);
-
-    setState(() {
-      tip = '\$$tipTotal';
-    });
   }
 }

@@ -8,10 +8,10 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #2/30
+## Day #3/30
 
-- Design the simple UI for the app. 🔧
+- Used Slider.
 
-- Used ToggleButton. 📘
+- Fontsize manipulation using setState
 
-- Created a tip calculator app that allows users to know the amount of tip they get from the purchase they made 💯
+- Created an app that allows user to Easily read contents by increasing and decreasing the font size using Slider.
