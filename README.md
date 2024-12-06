@@ -8,10 +8,9 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #3/30
+## Day #4/30
 
-- Used Slider.
+# FLASH CARDS
 
-- Fontsize manipulation using setState
-
-- Created an app that allows user to Easily read contents by increasing and decreasing the font size using Slider.
+Learnings
+- ......
