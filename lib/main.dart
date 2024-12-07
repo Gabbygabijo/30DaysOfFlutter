@@ -1,7 +1,5 @@
-import 'package:aflutterapp/flashcard.dart';
-import 'package:aflutterapp/flashcard_view.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,71 +13,85 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List<Flashcard> _flashcards = [
-    Flashcard(
-        question: 'What programmimg language does flutter use?',
-        answer: 'Dart'),
-    Flashcard(
-        question: 'Who is your go to person?',
-        answer: 'Ghost'),
-    Flashcard(
-        question: 'Who thought you programming with flutter?',
-        answer: 'Kilo Loco'),
-  ];
-
-  int _currentIndex = 0;
+  final WebViewController _controller = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onProgress: (int progress) {
+          // Update loading bar.
+        },
+        onPageStarted: (String url) {},
+        onPageFinished: (String url) {},
+        onHttpError: (HttpResponseError error) {},
+        onWebResourceError: (WebResourceError error) {},
+        onNavigationRequest: (NavigationRequest request) {
+          if (request.url.startsWith('https://www.youtube.com/')) {
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
+      ),
+    )
+    ..loadRequest(Uri.parse('https://gabijo-portfolio.netlify.app/'));
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 250,
-                height: 250,
-                child: FlipCard(
-                    front: FlashcardView(
-                      text: _flashcards[_currentIndex].question,
-                    ),
-                    back: FlashcardView(
-                      text: _flashcards[_currentIndex].answer,
-                    )),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: showPreviousCard,
-                    label: Text('Prev'),
-                    icon: Icon(Icons.chevron_left),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: showNextCard,
-                    label: Text('Next'),
-                    icon: Icon(Icons.chevron_right),
-                  ),
-                ],
-              )
-            ],
+        appBar: AppBar(
+          title: const Center(child: Text('Gabriel\'s Website')),
+          foregroundColor: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+        body: WebViewWidget(controller: _controller),
+        bottomNavigationBar: Container(
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20, right: 20),
+            child: OverflowBar(
+              children: [
+                navigationButton(
+                    Icons.chevron_left, _controller.canGoBack, _goBack),
+                navigationButton(
+                    Icons.chevron_right, _controller.canGoForward, _goForward),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void showNextCard() {
-    setState(() {
-      _currentIndex = (_currentIndex + 1 < _flashcards.length) ? _currentIndex + 1 : 0;
-    });
+  Widget navigationButton(IconData icon, Future<bool> Function() canNavigate,
+      Function(WebViewController) onPressed) {
+    return FutureBuilder<bool>(
+      future: canNavigate(), // Correctly assign the future
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          return IconButton(
+            icon: Icon(
+              icon,
+              color: Colors.white,
+            ),
+            onPressed: snapshot.data! ? () => onPressed(_controller) : null,
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
-  void showPreviousCard() {
-    setState(() {
-      _currentIndex = (_currentIndex -1 >= 0) ? _currentIndex -1 : _flashcards.length -1;
-    });
+  void _goBack(WebViewController controller) async {
+    if (await controller.canGoBack()) {
+      controller.goBack();
+    }
   }
 
+  void _goForward(WebViewController controller) async {
+    if (await controller.canGoForward()) {
+      controller.goForward();
+    }
+  }
 }
