@@ -8,14 +8,14 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #5/30
+## Day #6/30
 
-# SHOW WEBVIEW
+# Carousel slider
 
 Learnings
 
-- Web view
+- Adding images to a flutter application
 
-- Web view controller
+- Auto play Carousel
 
-- Used Navgation button to navigate backward and forward in the web view.
+- Using media query for the sizes(width).
