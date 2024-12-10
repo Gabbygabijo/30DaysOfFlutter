@@ -10,7 +10,7 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Day #7/30
 
-# Carousel slider
+# TIC TAC TOE
 
 Learnings
 
