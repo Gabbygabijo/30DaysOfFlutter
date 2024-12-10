@@ -14,7 +14,7 @@ Each day will have it's own branch, switch branch to see the project
 
 Learnings
 
-- Used Preferences Service to store and retreve data
+- Used Preferences Service to store and retrieve data
 
 - Save state locally
 
