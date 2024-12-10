@@ -28,6 +28,20 @@ class _MyAppState extends State<MyApp> {
             children: [Image.asset('images/board.png'), _boardTiles()],
           ),
         ),
+        floatingActionButton: SizedBox(
+            height: 50,
+            width: 200,
+            child: FloatingActionButton(
+              onPressed: () {
+                _restartGame();
+              },
+              child: const Text(
+                'New Game',
+                style: TextStyle(
+                    color: Colors.blue, fontSize: 30, fontWeight: FontWeight.w600),
+              ),
+            ),
+        ),
       ),
     );
   }
