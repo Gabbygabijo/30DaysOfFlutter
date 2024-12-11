@@ -1,6 +1,6 @@
+import 'package:aflutterapp/models.dart';
+import 'package:aflutterapp/perfrences_service.dart';
 import 'package:flutter/material.dart';
-import 'package:aflutterapp/board_tile.dart';
-import 'package:aflutterapp/tile_state.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,126 +14,138 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final navigtorKey = GlobalKey<NavigatorState>();
-  var _boardState = List.filled(9, TileState.EMPTY);
-  var _currentTurn = TileState.CROSS;
+  final _preferencesService = PreferencesService();
+
+  final _usernameController = TextEditingController();
+  var _selectedGender = Gender.FEMALE;
+  var _selectedLanguaes = <ProgrammingLanguage>{};
+  var _isEmployed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _populateField();
+  }
+
+  void _populateField() async {
+    final settings = await _preferencesService.getSettings();
+    setState(() {
+      _usernameController.text = settings.username;
+      _selectedGender = settings.gender;
+      _selectedLanguaes = settings.programmingLanguages;
+      _isEmployed = settings.isEmployed;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigtorKey,
       home: Scaffold(
-        body: Center(
-          child: Stack(
-            children: [Image.asset('images/board.png'), _boardTiles()],
+        appBar: AppBar(
+          title: const Text(
+            'User Setings',
+            textAlign: TextAlign.center,
           ),
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
+        body: ListView(
+          children: [
+            ListTile(
+              title: TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Username'),
+              ),
+            ),
+            RadioListTile(
+              title: const Text('Female'),
+              value: Gender.FEMALE,
+              groupValue: _selectedGender,
+              onChanged: (newValue) => setState(() {
+                _selectedGender = newValue!;
+              }),
+            ),
+            RadioListTile(
+              title: const Text('Male'),
+              value: Gender.MALE,
+              groupValue: _selectedGender,
+              onChanged: (newValue) => setState(() {
+                _selectedGender = newValue!;
+              }),
+            ),
+            RadioListTile(
+              title: const Text('Other'),
+              value: Gender.OTHER,
+              groupValue: _selectedGender,
+              onChanged: (newValue) => setState(() {
+                _selectedGender = newValue!;
+              }),
+            ),
+            CheckboxListTile(
+                title: const Text('Dart'),
+                value: _selectedLanguaes.contains(ProgrammingLanguage.DART),
+                onChanged: (_) {
+                  setState(() {
+                    _selectedLanguaes.contains(ProgrammingLanguage.DART)
+                        ? _selectedLanguaes.remove(ProgrammingLanguage.DART)
+                        : _selectedLanguaes.add(ProgrammingLanguage.DART);
+                  });
+                }),
+            CheckboxListTile(
+                title: const Text('JavaScript'),
+                value:
+                    _selectedLanguaes.contains(ProgrammingLanguage.JAVASCRIPT),
+                onChanged: (_) {
+                  setState(() {
+                    _selectedLanguaes.contains(ProgrammingLanguage.JAVASCRIPT)
+                        ? _selectedLanguaes
+                            .remove(ProgrammingLanguage.JAVASCRIPT)
+                        : _selectedLanguaes.add(ProgrammingLanguage.JAVASCRIPT);
+                  });
+                }),
+            CheckboxListTile(
+                title: const Text('Kotlin'),
+                value: _selectedLanguaes.contains(ProgrammingLanguage.KOTLIN),
+                onChanged: (_) {
+                  setState(() {
+                    _selectedLanguaes.contains(ProgrammingLanguage.KOTLIN)
+                        ? _selectedLanguaes.remove(ProgrammingLanguage.KOTLIN)
+                        : _selectedLanguaes.add(ProgrammingLanguage.KOTLIN);
+                  });
+                }),
+            CheckboxListTile(
+                title: const Text('Swift'),
+                value: _selectedLanguaes.contains(ProgrammingLanguage.SWIFT),
+                onChanged: (_) {
+                  setState(() {
+                    _selectedLanguaes.contains(ProgrammingLanguage.SWIFT)
+                        ? _selectedLanguaes.remove(ProgrammingLanguage.SWIFT)
+                        : _selectedLanguaes.add(ProgrammingLanguage.SWIFT);
+                  });
+                }),
+            SwitchListTile(
+              title: const Text('Is Employed'),
+              value: _isEmployed,
+              onChanged: (newValue) => setState(() {
+                _isEmployed = newValue;
+              }),
+            ),
+            TextButton(onPressed: _saveSettings, child: const Text('Save Settings'))
+          ],
         ),
       ),
     );
   }
 
-  Widget _boardTiles() {
-    return Builder(
-      builder: (context) {
-        final boardDimension = MediaQuery.of(context).size.width;
-        final tileDimension = boardDimension / 3;
-
-        return Container(
-          width: boardDimension,
-          height: boardDimension,
-          child: Column(
-            children: chunk(_boardState, 3).asMap().entries.map((entry) {
-              final chunkIndex = entry.key;
-              final tileStateChunk = entry.value;
-              return Row(
-                children: tileStateChunk.asMap().entries.map((innerEntry) {
-                  final innerIndex = innerEntry.key;
-                  final tileState = innerEntry.value;
-                  final tileIndex = (chunkIndex * 3) + innerIndex;
-                  return BoardTile(
-                    tileState: tileState,
-                    dimension: tileDimension,
-                    onPressed: () => _updateTileStateForIndex(tileIndex),
-                  );
-                }).toList(),
-              );
-            }).toList(),
-          ),
-        );
-      },
+  void _saveSettings() {
+    final newSettings = Settings(
+      username: _usernameController.text,
+      gender: _selectedGender,
+      programmingLanguages: _selectedLanguaes,
+      isEmployed: _isEmployed
     );
-  }
-
-  void _updateTileStateForIndex(int selectedIndex) {
-    if (_boardState[selectedIndex] == TileState.EMPTY) {
-      setState(() {
-        _boardState[selectedIndex] = _currentTurn;
-        _currentTurn = _currentTurn == TileState.CROSS
-            ? TileState.CIRCLE
-            : TileState.CROSS;
-      });
-      final winner = _findWinner();
-      if (winner != TileState.EMPTY) {
-        print('Winner is: $winner');
-        _showWinnerDialogue(winner);
-      }
-    }
-  }
-
-  TileState _findWinner() {
-    TileState winnerForMatch(int a, int b, int c) {
-      if (_boardState[a] != TileState.EMPTY &&
-          _boardState[a] == _boardState[b] &&
-          _boardState[b] == _boardState[c]) {
-        return _boardState[a];
-      }
-      return TileState.EMPTY;
-    }
-
-    final checks = [
-      winnerForMatch(0, 1, 2),
-      winnerForMatch(3, 4, 5),
-      winnerForMatch(6, 7, 8),
-      winnerForMatch(0, 3, 6),
-      winnerForMatch(1, 4, 7),
-      winnerForMatch(2, 5, 8),
-      winnerForMatch(0, 4, 8),
-      winnerForMatch(2, 4, 6),
-    ];
-
-    for (var check in checks) {
-      if (check != TileState.EMPTY) {
-        return check;
-      }
-    }
-    return TileState.EMPTY;
-  }
-
-  void _showWinnerDialogue(TileState tileState) {
-    final context = navigtorKey.currentState!.overlay!.context;
-    showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: const Text('Winner'),
-            content: Image.asset(
-                tileState == TileState.CROSS ? 'images/x.png' : 'images/o.png'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _restartGame();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('New Game'))
-            ],
-          );
-        });
-  }
-
-  void _restartGame() {
-    setState(() {
-      _boardState = List.filled(9, TileState.EMPTY);
-      _currentTurn = TileState.CROSS;
-    });
+    print(newSettings.username);
+    _preferencesService.saveSettings(newSettings);
   }
 }

@@ -8,12 +8,14 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #7/30
+## Day #8/30
 
-# TIC TAC TOE
+# User Settings
 
 Learnings
 
-- Switch case
+- Used Preferences Service to store and retrieve data
 
-- Alert dialogue
+- Save state locally
+
+- Created an interface that acceps data from users
