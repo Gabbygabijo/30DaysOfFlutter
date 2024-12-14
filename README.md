@@ -8,14 +8,12 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #8/30
+## Day #10/30
 
-# User Settings
+# Network Request
 
 Learnings
 
-- Used Preferences Service to store and retrieve data
+- How to make http requests
 
-- Save state locally
-
-- Created an interface that acceps data from users
+- Get and display json document
