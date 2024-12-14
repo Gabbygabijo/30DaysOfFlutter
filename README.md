@@ -8,14 +8,12 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #8/30
+## Day #9/30
 
-# User Settings
+# Share widget sreenshot
 
 Learnings
 
-- Used Preferences Service to store and retrieve data
+- Install external package
 
-- Save state locally
-
-- Created an interface that acceps data from users
+- How to use path provider to get  temporary dir path
