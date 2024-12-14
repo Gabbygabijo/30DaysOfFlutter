@@ -1,6 +1,8 @@
-import 'package:aflutterapp/models.dart';
-import 'package:aflutterapp/perfrences_service.dart';
 import 'package:flutter/material.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io'; // Import dart:io for file operations 
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,138 +16,50 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _preferencesService = PreferencesService();
-
-  final _usernameController = TextEditingController();
-  var _selectedGender = Gender.FEMALE;
-  var _selectedLanguaes = <ProgrammingLanguage>{};
-  var _isEmployed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _populateField();
-  }
-
-  void _populateField() async {
-    final settings = await _preferencesService.getSettings();
-    setState(() {
-      _usernameController.text = settings.username;
-      _selectedGender = settings.gender;
-      _selectedLanguaes = settings.programmingLanguages;
-      _isEmployed = settings.isEmployed;
-    });
-  }
+  final _screenshotController = ScreenshotController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'User Setings',
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-          centerTitle: true,
-        ),
-        body: ListView(
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ListTile(
-              title: TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(labelText: 'Username'),
+            Screenshot(
+              controller: _screenshotController,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Image.asset('images/codepassionately.png'),
+                    const Text(
+                      'Code Passionately',
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
               ),
             ),
-            RadioListTile(
-              title: const Text('Female'),
-              value: Gender.FEMALE,
-              groupValue: _selectedGender,
-              onChanged: (newValue) => setState(() {
-                _selectedGender = newValue!;
-              }),
-            ),
-            RadioListTile(
-              title: const Text('Male'),
-              value: Gender.MALE,
-              groupValue: _selectedGender,
-              onChanged: (newValue) => setState(() {
-                _selectedGender = newValue!;
-              }),
-            ),
-            RadioListTile(
-              title: const Text('Other'),
-              value: Gender.OTHER,
-              groupValue: _selectedGender,
-              onChanged: (newValue) => setState(() {
-                _selectedGender = newValue!;
-              }),
-            ),
-            CheckboxListTile(
-                title: const Text('Dart'),
-                value: _selectedLanguaes.contains(ProgrammingLanguage.DART),
-                onChanged: (_) {
-                  setState(() {
-                    _selectedLanguaes.contains(ProgrammingLanguage.DART)
-                        ? _selectedLanguaes.remove(ProgrammingLanguage.DART)
-                        : _selectedLanguaes.add(ProgrammingLanguage.DART);
-                  });
-                }),
-            CheckboxListTile(
-                title: const Text('JavaScript'),
-                value:
-                    _selectedLanguaes.contains(ProgrammingLanguage.JAVASCRIPT),
-                onChanged: (_) {
-                  setState(() {
-                    _selectedLanguaes.contains(ProgrammingLanguage.JAVASCRIPT)
-                        ? _selectedLanguaes
-                            .remove(ProgrammingLanguage.JAVASCRIPT)
-                        : _selectedLanguaes.add(ProgrammingLanguage.JAVASCRIPT);
-                  });
-                }),
-            CheckboxListTile(
-                title: const Text('Kotlin'),
-                value: _selectedLanguaes.contains(ProgrammingLanguage.KOTLIN),
-                onChanged: (_) {
-                  setState(() {
-                    _selectedLanguaes.contains(ProgrammingLanguage.KOTLIN)
-                        ? _selectedLanguaes.remove(ProgrammingLanguage.KOTLIN)
-                        : _selectedLanguaes.add(ProgrammingLanguage.KOTLIN);
-                  });
-                }),
-            CheckboxListTile(
-                title: const Text('Swift'),
-                value: _selectedLanguaes.contains(ProgrammingLanguage.SWIFT),
-                onChanged: (_) {
-                  setState(() {
-                    _selectedLanguaes.contains(ProgrammingLanguage.SWIFT)
-                        ? _selectedLanguaes.remove(ProgrammingLanguage.SWIFT)
-                        : _selectedLanguaes.add(ProgrammingLanguage.SWIFT);
-                  });
-                }),
-            SwitchListTile(
-              title: const Text('Is Employed'),
-              value: _isEmployed,
-              onChanged: (newValue) => setState(() {
-                _isEmployed = newValue;
-              }),
-            ),
-            TextButton(onPressed: _saveSettings, child: const Text('Save Settings'))
+            TextButton(
+                onPressed: _takeScreenshot,
+                child: const Text('Take Screenshot and share'))
           ],
-        ),
+        )),
       ),
     );
   }
 
-  void _saveSettings() {
-    final newSettings = Settings(
-      username: _usernameController.text,
-      gender: _selectedGender,
-      programmingLanguages: _selectedLanguaes,
-      isEmployed: _isEmployed
-    );
-    print(newSettings.username);
-    _preferencesService.saveSettings(newSettings);
+  void _takeScreenshot() async {
+    final imageFile = await _screenshotController.capture();
+    if (imageFile != null) {
+      final tempDir = await getTemporaryDirectory();
+      final filePath = '${tempDir.path}/screenshot.png';
+      final file = await File(filePath).writeAsBytes(imageFile);
+      Share.shareXFiles([XFile(file.path)], text: 'Check out this screenshot!');
+    } else {
+      print('Screenshot failed');
+    }
   }
 }
