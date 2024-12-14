@@ -8,12 +8,12 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #9/30
+## Day #10/30
 
-# Share widget sreenshot
+# Network Request
 
 Learnings
 
-- Install external package
+- How to make http requests
 
-- How to use path provider to get  temporary dir path
+- Get and display json document
