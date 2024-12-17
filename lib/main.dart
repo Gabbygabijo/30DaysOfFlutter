@@ -13,31 +13,35 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _cityTextController = TextEditingController();
   final _dataService = DataService();
-  String? _response;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Builder(builder: (context) {
-            if (_response != null) {
-              return Text(_response!);
-            } else {
-              return ElevatedButton(
-                  onPressed: _makeRequest, child: const Text('Make Request'));
-            }
-          }),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(padding: const EdgeInsets.symmetric(vertical: 50),
+              child: SizedBox(
+                width: 150,
+                child: TextField(
+                  controller: _cityTextController,
+                  decoration: const InputDecoration(labelText: 'City'),
+                  textAlign: TextAlign.center,
+                ),
+              ),),
+              ElevatedButton(onPressed: _search, child: const Text('Search'))
+            ],
+          ),
         ),
       ),
     );
   }
-
-  void _makeRequest() async {
-    final response = await _dataService.makeRequestToApi();
-    setState(() {
-      _response = response;
-    });
+  
+  void _search(){
+    _dataService.getWeather(_cityTextController.text);
   }
 }
