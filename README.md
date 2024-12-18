@@ -8,12 +8,14 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #10/30
+## Day #11/30
 
-# Network Request
+# Weather App
 
 Learnings
 
-- How to make http requests
+- How to make http requests.
 
-- Get and display json document
+- Making http request to get json documents.
+
+- displaying the documents on the screen.
