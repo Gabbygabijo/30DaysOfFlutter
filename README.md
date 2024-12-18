@@ -14,4 +14,8 @@ Each day will have it's own branch, switch branch to see the project
 
 Learnings
 
-- How to make http requests
+- How to make http requests.
+
+- Making http request to get json documents.
+
+- displaying the documents on the screen.
