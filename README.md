@@ -8,14 +8,12 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #11/30
+## Day #12/30
 
-# Weather App
+# Dynamic list view
 
 Learnings
 
-- How to make http requests.
+- Understanding how the AppBar and the TabBar works.
 
-- Making http request to get json documents.
-
-- displaying the documents on the screen.
+- Using the ListView and the GridView builders.

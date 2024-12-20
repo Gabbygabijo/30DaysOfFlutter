@@ -1,5 +1,3 @@
-import 'package:aflutterapp/data_service.dart';
-import 'package:aflutterapp/models.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,50 +12,47 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _cityTextController = TextEditingController();
-  final _dataService = DataService();
-  WeatherResponse? _response;
+  final _users = List.filled(20, 'Gabby');
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (_response != null)
-                Column(
-                  children: [
-                    Image.network(_response!.iconUrl),
-                    Text(
-                      '${_response?.tempInfo?.temperature}º',
-                      style: const TextStyle(fontSize: 40),
-                    ),
-                    Text('${_response?.weatherInfo?.description}'),
-                  ],
-                ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: SizedBox(
-                  width: 150,
-                  child: TextField(
-                    controller: _cityTextController,
-                    decoration: const InputDecoration(labelText: 'City'),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              ElevatedButton(onPressed: _search, child: const Text('Search'))
-            ],
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          backgroundColor: Colors.white70,
+          appBar: AppBar(
+            bottom: const TabBar(tabs: [Text('List'), Text('Grid')]),
+            backgroundColor: Colors.white30,
+            // foregroundColor: Colors.white24,
+          ),
+          body: TabBarView(
+            children: [_contentListView(), _constGridView()],
           ),
         ),
       ),
     );
   }
 
-  void _search() async {
-    final response = await _dataService.getWeather(_cityTextController.text);
-    setState(() => _response = response);
+  Widget _contentListView() {
+    return ListView.builder(
+      itemCount: 20,
+      itemBuilder: (context, index) => Card(
+        child: ListTile(
+          title: Text(index.toString()),
+          onTap: () => print('Hello $index'),
+        ),
+      ),
+    );
+  }
+
+  Widget _constGridView() {
+    return GridView.builder(
+      itemCount: _users.length,
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      itemBuilder: (context, index) =>
+          Card(child: GridTile(child: Center(child: Text(_users[index])))),
+    );
   }
 }
