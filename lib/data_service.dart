@@ -14,7 +14,7 @@ class DataService {
       final posts =  json.map((postJson) => Post.fromJson(postJson)).toList();
       return posts;
     } catch (e) {
-      rethrow;
+      throw e;
     }
   }
 }
