@@ -8,12 +8,8 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #12/30
+## Day #13/30
 
-# Dynamic list view
+# BLOC AND CUBIT
 
 Learnings
-
-- Understanding how the AppBar and the TabBar works.
-
-- Using the ListView and the GridView builders.
