@@ -13,3 +13,4 @@ Each day will have it's own branch, switch branch to see the project
 # BLOC AND CUBIT
 
 Learnings
+- Managing states
