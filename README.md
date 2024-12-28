@@ -8,9 +8,10 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #13/30
+## Day #14/30
 
-# BLOC AND CUBIT
+# FROM CUBIT TO BLOC
 
 Learnings
+
 - Managing states
