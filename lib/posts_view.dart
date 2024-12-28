@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PostsView extends StatelessWidget {
   const PostsView({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,20 +14,38 @@ class PostsView extends StatelessWidget {
         backgroundColor: Colors.black38,
         foregroundColor: Colors.white,
       ),
-      body: BlocBuilder<PostsCubit, List<Post>>(builder: (context, posts) {
-        if (posts.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.black38,),
-          );
-        }
-        return ListView.builder(itemBuilder: (context, index){
-          return Card(
-            child: ListTile(
-              title: Text(posts[index].title),
-            ),
-          );
-        });
-      } ,),
+      body: BlocBuilder<PostsBloc, PostsState>(
+        builder: (context, state) {
+          if (state is LoadingPostsState) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.black38,
+              ),
+            );
+          } else if (state is LoadedPostsState) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                BlocProvider.of<PostsBloc>(context).add(PullToRefreshEvent());
+              },
+              child: ListView.builder(
+                itemCount: state.posts.length,
+                itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(state.posts[index].title),
+                  ),
+                );
+              }),
+            );
+          } else if (state is FailedToLoadPostsState) {
+            return Center(
+              child: Text('Error occured: ${state.error}'),
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }
