@@ -1,3 +1,4 @@
+import 'package:aflutterapp/data_service.dart';
 import 'package:aflutterapp/posts_cubit.dart';
 import 'package:aflutterapp/posts_view.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider<PostsCubit>(
-          create: (context) => PostsCubit()..getPosts(),
+      home: BlocProvider<PostsBloc>(
+          create: (context) => PostsBloc(DataService())..add(LoadPostsEvent()),
           child: const PostsView()),
     );
   }
