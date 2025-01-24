@@ -8,11 +8,8 @@ Each day will have it's own branch, switch branch to see the project
 
 ## Present challenge
 
-## Day #15/30
+## Day #16/30
 
-# BLOC NAVIGATION
+# POKDEX APP
 
 Learnings
-
-- Jumping from screen to screen
-- App Navigation
