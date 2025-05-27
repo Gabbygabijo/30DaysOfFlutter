@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Theme.of(context).copyWith(primaryColor: Colors.red, colorScheme: Theme.of(context).colorScheme.copyWith(secondary: Colors.redAccent)),
-      home: PokedexView(),
+      home: const PokedexView(),
     );
   }
 }
