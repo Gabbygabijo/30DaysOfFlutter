@@ -18,6 +18,8 @@ class PokemonListing {
   final int id;
   final String name;
 
+  String get imageUrl => 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
+
   PokemonListing({required this.id, required this.name});
 
   factory PokemonListing.fromJson(Map<String, dynamic> json) {
@@ -29,4 +31,16 @@ class PokemonListing {
   }
 }
 
-class PokemonPageResponse {}
+class PokemonPageResponse {
+  final List<PokemonListing> pokemonListing;
+  final bool canLoadNextPage;
+
+  PokemonPageResponse({required this.pokemonListing, required this.canLoadNextPage});
+
+  factory PokemonPageResponse.fromJson(Map<String, dynamic> json) {
+    final canLoadNextPage = json['next'] != null;
+    final pokemonListing = (json['results'] as List).map((listingJson) => PokemonListing.fromJson(listingJson)).toList();
+
+    return PokemonPageResponse(pokemonListing: pokemonListing, canLoadNextPage: canLoadNextPage);
+  }
+}
