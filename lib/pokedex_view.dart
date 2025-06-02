@@ -23,8 +23,9 @@ class PokedexView extends StatelessWidget {
           );
         } else if (state is PokemonPageLoadSuccess) {
           return GridView.builder(
-              gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.8),
               itemCount: state.pokemonListings.length,
               itemBuilder: (context, index) {
                 return Card(
@@ -33,7 +34,7 @@ class PokedexView extends StatelessWidget {
                     children: [
                       Image.network(state.pokemonListings[index].imageUrl),
                       Text(state.pokemonListings[index].name)
-                      ],
+                    ],
                   )),
                 );
               });
